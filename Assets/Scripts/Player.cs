@@ -19,13 +19,7 @@ public class Player : NetworkBehaviour
         transform.position = position.Value;
     }
     
-    private static Vector3 GetRandomPositionOnPlane()
-    {
-        return new Vector3(Random.Range(-3f, 3f), 1f, Random.Range(-3f, 3f));
-    }
-
-
-    private void Move()
+    public void Move()
     {
         if (NetworkManager.Singleton.IsServer)
         {
@@ -37,6 +31,11 @@ public class Player : NetworkBehaviour
         {
             SubmitPositionRequestServerRpc();
         }
+    }
+    
+    private static Vector3 GetRandomPositionOnPlane()
+    {
+        return new Vector3(Random.Range(-3f, 3f), 1f, Random.Range(-3f, 3f));
     }
 
     [ServerRpc]
