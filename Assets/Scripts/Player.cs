@@ -23,9 +23,7 @@ public class Player : NetworkBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            var randomPosition = GetRandomPositionOnPlane();
-            transform.position = randomPosition;
-            position.Value = randomPosition;
+            position.Value = GetRandomPositionOnPlane();
         }
         else
         {
