@@ -78,7 +78,7 @@ public class Player : NetworkBehaviour
 
     private void SpawnProjectile()
     {
-        _projectileGameObject = Instantiate(_projectilePrefab, _spawnPointTransform.position, Quaternion.identity);
+        _projectileGameObject = Instantiate(_projectilePrefab, _spawnPointTransform.position, _spawnPointTransform.rotation);
 
         _projectileNetworkObject = _projectileGameObject.GetComponent<NetworkObject>();
         _projectileNetworkObject.Spawn();
