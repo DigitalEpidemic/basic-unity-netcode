@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 2419649756748761365}
   - component: {fileID: 2419649756748761366}
   - component: {fileID: 3516592164095964933}
+  - component: {fileID: 359654691543921412}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -161,10 +162,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5102ba818ecc4ac4bb7788dc12a3592b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position:
+  positionNetworkVariable:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  rotationNetworkVariable:
     m_InternalValue: {x: 0, y: 0, z: 0}
   _projectilePrefab: {fileID: 6975557887578957754, guid: 7a6ec74011b5a904f861d9cc66151235, type: 3}
   _spawnPointTransform: {fileID: 7373227590927221023}
+  rotateSpeed: 0.5
+--- !u!114 &359654691543921412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2419649756748761367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 071c5c2afecdd064abdf0af349395649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 0
+  SyncPositionY: 0
+  SyncPositionZ: 0
+  SyncRotAngleX: 0
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!1 &5041493698962139010
 GameObject:
   m_ObjectHideFlags: 0
