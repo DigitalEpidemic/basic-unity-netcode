@@ -11,3 +11,7 @@
     - Firing:
         - On `Host`, it will say `Fire`
         - On `Client`, it will say `Request Fire`
+
+- Other controls:
+    - `A`/`Left`: Rotate player to their left
+    - `D`/`Right`: Rotate player to their right
