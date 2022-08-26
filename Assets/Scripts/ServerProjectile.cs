@@ -13,11 +13,23 @@ public class ServerProjectile : NetworkBehaviour
         transform.position += -transform.forward * speed * Time.deltaTime;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            if (IsServer)
+            {
+                Debug.Log("Hit Player");
+                Destroy(transform.parent.gameObject);
+            }
+        }
+    }
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
-            Destroy(gameObject, 5f);
+            Destroy(transform.parent.gameObject, 5f);
         }
     }
 }
