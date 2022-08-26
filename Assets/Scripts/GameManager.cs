@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
       else
       {
          StatusLabels();
-         SubmitNewPosition();
+         SendPlayerMove();
+         SendPlayerFire();
       }
       
       GUILayout.EndArea();
@@ -37,15 +38,15 @@ public class GameManager : MonoBehaviour
       GUILayout.Label("Mode: " + mode);
    }
 
-   private static void SubmitNewPosition()
+   private static void SendPlayerMove()
    {
       if (GUILayout.Button(NetworkManager.Singleton.IsServer ? "Move" : "Request Position Change"))
       {
          if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
          {
-            foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
+            foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
             {
-               var networkPlayer = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GetComponent<Player>();
+               var networkPlayer = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId).GetComponent<Player>();
                networkPlayer.Move();
             }
          }
@@ -53,6 +54,26 @@ public class GameManager : MonoBehaviour
          {
             var localPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
             localPlayer.Move();
+         }
+      }
+   }
+
+   private static void SendPlayerFire()
+   {
+      if (GUILayout.Button(NetworkManager.Singleton.IsServer ? "Fire" : "Request Fire"))
+      {
+         if (NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
+         {
+            foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
+            {
+               var networkPlayer = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId).GetComponent<Player>();
+               networkPlayer.Fire();
+            }
+         }
+         else
+         {
+            var localPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<Player>();
+            localPlayer.Fire();
          }
       }
    }
