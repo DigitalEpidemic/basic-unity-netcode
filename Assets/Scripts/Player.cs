@@ -42,7 +42,7 @@ public class Player : NetworkBehaviour
 
     public void Move()
     {
-        if (NetworkManager.Singleton.IsServer)
+        if (IsServer)
         {
             positionNetworkVariable.Value = GetRandomPositionOnPlane();
         }
@@ -60,7 +60,7 @@ public class Player : NetworkBehaviour
 
     public void Fire()
     {
-        if (NetworkManager.Singleton.IsServer)
+        if (IsServer)
         {
             SpawnProjectile();
         }
