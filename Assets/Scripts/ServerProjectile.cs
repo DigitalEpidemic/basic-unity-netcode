@@ -6,7 +6,11 @@ using UnityEngine;
 
 public class ServerProjectile : NetworkBehaviour
 {
+    [SerializeField] private GameObject explosionPrefab;
     [SerializeField] private int speed = 15;
+
+    private GameObject _explosionGameObject;
+    private NetworkObject _explosionNetworkObject;
     
     private void Update()
     {
@@ -17,12 +21,22 @@ public class ServerProjectile : NetworkBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            
+            Debug.Log("Hit Player");
             if (IsServer)
             {
-                Debug.Log("Hit Player");
+                SpawnExplosion();
                 Destroy(transform.parent.gameObject);
             }
         }
+    }
+
+    private void SpawnExplosion()
+    {
+        _explosionGameObject = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
+        _explosionNetworkObject = _explosionGameObject.GetComponent<NetworkObject>();
+        _explosionNetworkObject.Spawn();
     }
 
     public override void OnNetworkSpawn()
