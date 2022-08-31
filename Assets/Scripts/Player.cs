@@ -5,6 +5,8 @@ using Random = UnityEngine.Random;
 
 public class Player : NetworkBehaviour
 {
+    public string Name { get; set; }
+    
     public NetworkVariable<Vector3> positionNetworkVariable = new();
 
     [SerializeField] private GameObject _projectilePrefab;

@@ -1,10 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+   private static string _playerName = "";
+   private static Dictionary<ulong, string> _clientData;
+
+   public static string GetPlayerName(ulong clientId)
+   {
+      return _clientData.TryGetValue(clientId, out string playerName) ? playerName : null;
+   }
+
+   private void Start()
+   {
+      NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
+   }
+
    private void OnGUI()
    {
       GUILayout.BeginArea(new Rect(10, 10, 300, 300));
@@ -25,11 +40,31 @@ public class GameManager : MonoBehaviour
 
    private static void StartButtons()
    {
-      if (GUILayout.Button("Host")) NetworkManager.Singleton.StartHost();
-      if (GUILayout.Button("Client")) NetworkManager.Singleton.StartClient();
+      if (GUILayout.Button("Host")) StartHost();
+      if (GUILayout.Button("Client")) StartClient();
       if (GUILayout.Button("Server")) NetworkManager.Singleton.StartServer();
+      _playerName = GUILayout.TextField(_playerName, 25);
    }
 
+   private static void StartHost()
+   {
+      _clientData = new Dictionary<ulong, string>();
+      _clientData[NetworkManager.Singleton.LocalClientId] = _playerName;
+      
+      NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(_playerName);
+      NetworkManager.Singleton.StartHost();
+   }
+
+   private static void StartClient()
+   {
+      if (NetworkManager.Singleton.IsServer)
+      {
+         _clientData[NetworkManager.Singleton.LocalClientId] = _playerName;
+      }
+      NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(_playerName);
+      NetworkManager.Singleton.StartClient();
+   }
+   
    private static void StatusLabels()
    {
       var mode = NetworkManager.Singleton.IsHost ? "Host" : NetworkManager.Singleton.IsServer ? "Server" : "Client";
@@ -76,5 +111,16 @@ public class GameManager : MonoBehaviour
             localPlayer.Fire();
          }
       }
+   }
+
+   private static void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
+   {
+      string payload = Encoding.ASCII.GetString(request.Payload);
+      
+      _clientData[request.ClientNetworkId] = payload;
+      
+      response.Approved = true;
+      response.CreatePlayerObject = true;
+      response.Pending = false;
    }
 }
